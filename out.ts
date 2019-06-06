@@ -78,7 +78,7 @@ async function importGpgKey(gpgHome: string, keyFile: string, passphrase?: strin
 }
 
 export default async function out(): Promise<{ data: Object, cleanupCallback: (() => void) | undefined }> {
-
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     let cleanupCallback: (() => void) | undefined = undefined;
 
     // Determine build path and decend into it.
@@ -217,7 +217,7 @@ export default async function out(): Promise<{ data: Object, cleanupCallback: ((
 
     headers.append("Content-length", String(chartFileStat.size))
     headers.append("Content-Disposition", `attachment; filename="${path.basename(chartFile)}"`)
-
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     process.stderr.write(`Uploading chart file: "${chartFile}"...\n`);
     const readStream = fs.createReadStream(chartFile);
     let postResult: Response;
@@ -226,11 +226,12 @@ export default async function out(): Promise<{ data: Object, cleanupCallback: ((
         if (request.params.force) {
             postUrl += "?force=true"
         }
+        process.stderr.write(`Uploading to URL: "${postUrl}"...\n`);
         postResult = await fetch(postUrl, {
             method: "POST",
             headers: headers,
             body: readStream
-        });
+        }) ;
     } catch (e) {
         process.stderr.write("Upload of chart file has failed.\n");
         process.stderr.write(e);

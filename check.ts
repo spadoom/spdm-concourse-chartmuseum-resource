@@ -11,7 +11,8 @@ const stdout = process.stdout;
 const stderr = process.stderr;
 
 (async () => {
-
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    
     // Fetches the JSON object from stdin.
     const request = await retrieveRequestFromStdin<CheckRequest>();
 

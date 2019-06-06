@@ -13,7 +13,7 @@ import { InRequest, InResponse } from "./index";
 const writeFile = util.promisify(fs.writeFile);
 
 (async () => {
-
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     // Determine destination path.
     if (process.argv.length != 3) {
         process.stderr.write(`Expected exactly one argument (destination), got ${process.argv.length - 2}.`);
